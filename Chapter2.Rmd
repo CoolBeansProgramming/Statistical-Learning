@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-## Loading libraries 
+## Loading libraries and data
 
 ```{r warning=FALSE, message=FALSE}
 library(ISLR2)
@@ -26,7 +26,7 @@ rownames(college) <- college[, 1]
 View(college)
 ```
 
-
+## Exploring the data
 
 ```{r view_college}
 college <- college[, -1]
@@ -41,8 +41,12 @@ summary(college)
 college$Private <-as.factor(college$Private)
 pairs(college[,1:5])
 ```
+
+
+## Graphing the data
 ```{r college_outstate_private_plot}
-boxplot(college$Outstate ~ college$Private, xlab= "Private", ylab="Outstate", main="Out of State Tuition vs Private")
+boxplot(college$Outstate ~ college$Private, xlab= "Private", ylab="Outstate", 
+        main="Out of State Tuition vs Private")
 ```
 ```{r create_elite}
 Elite <-rep("No", nrow(college))
@@ -56,7 +60,8 @@ summary(college)
 ``` 
 
 ```{r elite_boxplots}
-boxplot(college$Outstate ~ college$Elite, xlab="Elite",ylab="Outstate", main="Out of State Tuition vs Elite")
+boxplot(college$Outstate ~ college$Elite, xlab="Elite",ylab="Outstate", 
+        main="Out of State Tuition vs Elite")
 ```
 ```{r college_hist}
 par(mfrow=c(2,2))
