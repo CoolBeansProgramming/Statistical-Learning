@@ -1,0 +1,131 @@
+---
+title: "Exploratory Analysis"
+author: "Cool Beans Programming"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Loading libraries and data
+
+```{r warning=FALSE, message=FALSE}
+library(ISLR2)
+college <- read.csv("https://www.statlearning.com/s/College.csv")
+rownames(college) <- college[, 1]
+View(college)
+```
+
+
+## Variables 
+
+Private: public/private indicator
+
+Apps: number of applications received
+
+Accept: number of applications accepted
+
+Enroll: number of new students enrolled
+
+Top10perc: new students from the top 10% of high school class
+
+Top25perc: new students from the top 25% of high school class
+
+F.Undergrad: number of full-time undergraduates
+
+P.Undergrad: number of part-time undergraduates
+
+Outstate: out-of-state tuition
+
+Room.Board: room and board costs
+
+Books: estimated book costs
+
+Personal: estimated personal spending
+
+PhD: percent of faculty with Ph.D.'s
+
+Terminal: percent of faculty with terminal degree
+
+S.F. Ratio: student/faculty ratio
+
+perc.alumni: percent of alumni who donate
+
+Expend: instructional expenditure per student
+
+Grad.Rate: graduation rate 
+
+&nbsp;
+
+## Exploring the data
+
+```{r view_college}
+college <- college[, -1]
+head(college)
+```
+
+
+```{r summary_college}
+summary(college)
+```
+
+Each row indicates a different college or university. Most of the variables are quantitative while only the private/public indicator variable is categorical. Next, we convert this indicator to a factor variable and create a scatter plot matrix of the first 5 variables. 
+
+```{r college_pairs}
+# convert Private to factor variable 
+college$Private <-as.factor(college$Private)
+pairs(college[,1:5])
+```
+From the graph, Apps and Accept appear to have a strong linear relationship with maybe one outlier. Accept and Enroll have a linear relationship as well. 
+
+
+
+
+
+
+## Graphing the data
+
+Side-by-side box plots of out of state tuition by private and public schools indicates that the median out of state tuition for private schools is larger than that of out of state public students, while public out of state students have a larger distribution. 
+
+
+```{r college_outstate_private_plot}
+boxplot(college$Outstate ~ college$Private, xlab= "Private", ylab="Outstate", 
+        main="Out of State Tuition vs Private")
+```
+## Feature Engineering 
+
+We now create a new qualitative variable called Elite by binning the Top10perc variable. The schools will be divided into two groups based on if the proportion of students coming from the top 10% of their high school classes exceeds 50%. 
+
+```{r create_elite}
+Elite <-rep("No", nrow(college))
+Elite[college$Top10perc > 50] <-"Yes"
+Elite <-as.factor(Elite)
+college <-data.frame(college,Elite)
+```
+
+The majority of students are not categorized as elite; only 11.1% of students fall into this category. 
+
+```{r elite_summary}
+summary(college)
+``` 
+
+```{r elite_boxplots}
+boxplot(college$Outstate ~ college$Elite, xlab="Elite",ylab="Outstate", 
+        main="Out of State Tuition vs Elite")
+```
+The distribution of non-elite students paying out of state tuition greater than that of elite, out of state students. The median out of state tuition price is greater for elite students than for non-elite students. 
+
+```{r college_hist}
+par(mfrow=c(2,2))
+hist(college$Apps, xlab="Apps Received", ylab="", main="Dist. of Applications Received")
+hist(college$Accept, xlab="Apps Accepted", ylab="", main="Dist. of Applications Accepted")
+hist(college$Room.Board, xlab="Room and Board Cost", ylab="", main="Dist. of Room & Board Costs")
+hist(college$Books, xlab="Estimated Book Cost", ylab="", main="Dist. of Textbook Costs")
+```
+
+Histograms are plotted for 4 different variables. The distribution of applications received and applications accepted is right skewed while room & board costs and textbook costs are more normally distributed. 
