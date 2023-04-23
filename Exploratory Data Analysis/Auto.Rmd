@@ -1,0 +1,105 @@
+---
+title: "Exploratory Analysis"
+author: "Cool Beans Programming"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Loading libraries and data
+
+```{r warning=FALSE, message=FALSE}
+library(ISLR2)
+data(Auto)
+```
+
+## Exploring the data
+
+```{r explore_auto}
+summary(Auto)
+```
+
+All variables are quantitative except the name of the automobile. 
+
+
+## Key metrics
+
+```{r auto_range}
+apply(Auto[,1:7], 2, range)
+```
+
+The ranges of the variables are given above. The greatest range is among vehicle weight. Below, the mean and standard deviation of each quantitative predictor is given.
+
+```{r auto_mean}
+apply(Auto[,1:7], 2, mean)
+```
+
+```{r auto_std}
+apply(Auto[,1:7], 2, sd)
+```
+
+## Removing Observations 
+```{r auto_10_85}
+Auto2 <-Auto[-c(10:85),]
+```
+
+
+```{r auto2_range}
+apply(Auto2[,1:7],2,range)
+```
+
+```{r auto2_mean}
+apply(Auto2[,1:7],2,mean)
+```
+
+```{r auto2_std}
+apply(Auto2[,1:7],2,sd)
+```
+
+After removing observations 10 through 85, the range, mean, and standard deviation for all quantitative variables are relatively close. 
+
+## Investigate Predictors
+
+```{r auto_scatterplot_matrix}
+pairs(Auto[,1:7])
+``` 
+Many of the variables appear to have some sort of relationship though not necessarily a linear one. MPG has a non-linear relationship with most of the other predictors while displacement has a linear relationship with horsepower, weight, and acceleration. 
+
+```{r auto_scatterplots}
+
+par(mfrow=c(2,2))
+
+plot(Auto$displacement, Auto$horsepower, xlab="Displacement", ylab="Horsepower")
+abline(lm(Auto$horsepower ~ Auto$displacement), col="red")
+
+plot(Auto$displacement, Auto$weight, xlab="Displacement", ylab="Weight")
+abline(lm(Auto$weight ~ Auto$displacement), col="red")
+
+plot(Auto$displacement, Auto$acceleration, xlab="Displacement", ylab="Acceleration")
+abline(lm(Auto$acceleration ~ Auto$displacement), col="red")
+
+
+```
+## Making Predictions
+
+To predict gas millage on the basis of the other variables, there are a few variables that may be useful in predicting mpg. 
+
+```{r mpg_graphs}
+par(mfrow=c(2,3))
+
+plot(Auto$mpg, Auto$cylinders, xlab="Mpg", ylab="Cylinders")
+plot(Auto$mpg, Auto$displacement,xlab="Mpg", ylab="Displacement")
+plot(Auto$mpg, Auto$horsepower,xlab="Mpg", ylab="Horsepower")
+plot(Auto$mpg, Auto$weight,xlab="Mpg", ylab="Weight")
+plot(Auto$mpg, Auto$acceleration,xlab="Mpg", ylab="Acceleration")
+plot(Auto$mpg, Auto$year,xlab="Mpg", ylab="Year")
+
+
+```
+The set of plots above clearly indicate that there is a non-linear relationship between millage and weight, displacement, and horsepower. There may be some type of relationship between millage and acceleration as well. 
