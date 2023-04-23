@@ -1,0 +1,68 @@
+---
+title: "Exploratory Analysis: Boston Housing"
+author: "Cool Beans Programming"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load the data
+```{r load_boston, warning=FALSE}
+library(ISLR2)
+data(Boston)
+```
+
+## Explore the data
+```{r boston_summary}
+dim(Boston)
+```
+
+There are 13 variables and 506 observations in the Boston data set. Each row represents a different neighborhood in Boston and the columns represent the predictor variables and relate to crime rate, average number of rooms, and pupil-teacher ratio by town among others. 
+
+## Relationship to per capita crime rate
+```{r boston_predictors}
+pairs(Boston)
+```
+Some variables like rm (average number of rooms per dwelling) and lstat (lower status of the pop.) appear to have a linear relationship with the median value of owner-occupied homes (in $1000). Overall it is difficult to tell from the scatter plot matrix. 
+
+```{r boston_cor}
+cor(Boston)[,1]
+```
+
+Rad and Tax have a strong and positive correlation to per capita crime rate while Indus, Nox, Lstat, and Age have a moderate and positive correlation with Crim. Dis and Medv have a moderate and negative correlation with Crim. 
+
+
+```{r boston_hist}
+hist(Boston$crim, xlab="Per Capita Crime Rate by Town")
+hist(Boston$tax, xlab="Full-Value Property-Tax rate per $10,000")
+hist(Boston$ptratio, xlab="Pupil-Teacher Ratio by Town")
+```
+
+The census tracts do not appear to have particularly high crime rates. The data is slightly left skewed from the pupil-teacher ratio by town. 
+
+```{r boston_CharlesRiver}
+sum(Boston$chas == 1)
+```
+
+There are 35 census tracts bound the Charles river. 
+
+```{r boston_median_pupil}
+median(Boston$ptratio)
+```
+
+The median pupil-teacher ratio by town is 19.05. 
+
+```{r boston_subset}
+t(subset(Boston, Boston$medv==min(Boston$medv)))
+```
+Census tracts 399 and 406 had the lowest median value of owner occupied homes.
+
+```{r boston_rooms}
+sum(Boston$rm > 8)
+```
+
+Thirteen census tracts average more than 8 rooms per dwelling. 

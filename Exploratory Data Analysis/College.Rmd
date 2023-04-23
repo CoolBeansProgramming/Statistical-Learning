@@ -1,5 +1,5 @@
 ---
-title: "Exploratory Analysis"
+title: "Exploratory Analysis: Higher Education"
 author: "Cool Beans Programming"
 date: "`r Sys.Date()`"
 output:
